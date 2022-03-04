@@ -40,3 +40,25 @@ JNI_FUNC(setFileOutput)(JNIEnv *env, jclass type,
     env->ReleaseStringUTFChars(filePath, ntvFilePath);
     return result;
 }
+
+JNIEXPORT int JNICALL
+JNI_FUNC(addFrameRgba)(JNIEnv *env, jclass type,
+                        jlong instancePtr, jobject bitmap,
+                        jint index, jint width, jint height, jint delay) {
+    auto *instance = (gifski *) instancePtr;
+    auto *data = static_cast<unsigned char *>(lockBitmapPixels(env, bitmap));
+    if (data != nullptr) {
+        return gifski_add_frame_rgba(env, instance, index, width, height, data, delay);
+    }
+    // 扩展自 GifskiError 的错误索引
+    return 16;
+}
+
+JNIEXPORT int JNICALL
+JNI_FUNC(finish)(JNIEnv *env, jclass type, jlong instancePtr) {
+    auto *instance = (gifski *) instancePtr;
+    logStr(env, "start to finish");
+    int result = gifski_finish(instance);
+    logStrI(env, "finish result:%d", result);
+    return result;
+}

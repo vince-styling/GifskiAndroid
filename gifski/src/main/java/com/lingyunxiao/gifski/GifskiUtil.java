@@ -35,6 +35,8 @@ public class GifskiUtil {
                 return "progress callback returned 0, writing aborted";
             case 15:
                 return "should not happen, file a bug";
+            case 16:
+                return "lock not bitmap pixels";
             default:
                 return "unknow";
         }

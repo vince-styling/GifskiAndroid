@@ -2,6 +2,7 @@ package com.hzy.face.morphme.activity
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -34,14 +35,41 @@ class MainActivity : AppCompatActivity() {
 
     private fun process() {
         Log.i("gifski", "start")
-        val gifskiNativeObj = GifskiJniApi.gifskiNew(1080, 2340, 90, false, true)
+        val targetWidth = 1080
+        val targetHeight = 2340
+        val gifskiNativeObj = GifskiJniApi.gifskiNew(targetWidth, targetHeight, 90, false, true)
         Log.i("gifski", "new instancePtr:$gifskiNativeObj")
-        val result = GifskiJniApi.setFileOutput(
-            gifskiNativeObj,
-            "/storage/emulated/0/Android/data/com.lingyx.gifgski/files/3476/output.gif"
-        )
-        Log.i("gifski", "result means:${parseGifskiResult(result)}")
+        if (gifskiNativeObj == 0L) return
+        try {
+            val filesDir = getExternalFilesDir(null)!!
+            val result = GifskiJniApi.setFileOutput(gifskiNativeObj, "$filesDir/3476/output.gif")
+            Log.i("gifski", "result means:${parseGifskiResult(result)}")
+            if (result == 0) pushFrameList(gifskiNativeObj, targetWidth, targetHeight)
+        } catch (e: Throwable) {
+            Log.e("gifski", "process error", e)
+        } finally {
+            GifskiJniApi.finish(gifskiNativeObj)
+        }
         Log.i("gifski", "end")
+    }
+
+    private fun pushFrameList(gifskiNativeObj: Long, targetWidth: Int, targetHeight: Int) {
+        val frameList = mutableListOf<String>()
+        val filesDir = getExternalFilesDir(null)!!
+        for (index in 0..34) {
+            val frameName = "${index.toString().padStart(6, '0')}.png"
+            frameList.add("$filesDir/3476/$frameName")
+        }
+        Log.i("gifski", "frame size:${frameList.size}")
+        for ((index, frame) in frameList.withIndex()) {
+            val bitmap = BitmapFactory.decodeFile(frame)
+            val result = GifskiJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, 5)
+            if (result != 0) {
+                Log.i("gifski", "push frame result means:${parseGifskiResult(result)}")
+                return
+            }
+        }
+        Log.i("gifski", "done to push ${frameList.size} frames")
     }
 
     private fun getRequiredPermissions(): Array<String?> {

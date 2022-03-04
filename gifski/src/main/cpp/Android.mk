@@ -12,7 +12,7 @@ GIFSKI_SOURCE:= $(wildcard $(LOCAL_PATH)/gifski/*.cpp)
 LOCAL_SRC_FILES += $(GIFSKI_SOURCE)
 
 # Using android logging library
-LOCAL_LDLIBS := -llog
+LOCAL_LDLIBS := -llog -ljnigraphics
 # Define pre-processor macro for log levels
 LOCAL_CFLAGS := -DLOG_LEVEL=LOG_VERBOSE
 
