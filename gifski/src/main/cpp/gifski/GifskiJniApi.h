@@ -9,8 +9,14 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlong JNICALL
-JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type, jint width, jint height);
+JNIEXPORT long JNICALL
+JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
+                    jint width, jint height, jshort quality,
+                    jboolean fast, jboolean repeat);
+
+JNIEXPORT int JNICALL
+JNI_FUNC(setFileOutput)(JNIEnv *env, jclass type,
+                        jlong instancePtr, jstring filePath);
 
 #ifdef __cplusplus
 }
