@@ -4,7 +4,7 @@
 JNIEXPORT jlong JNICALL
 JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type, jint width, jint height) {
     GifskiSettings *set = new GifskiSettings();
-    LOGI("new func width:%d", width);
+    logStrI(env, "new func width:%d", width);
     set->width = width;
     set->height = height;
     set->quality = 90;
@@ -12,9 +12,9 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type, jint width, jint height) {
     set->repeat = false;
     gifski *instance = gifski_new(env, set);
     if (instance == nullptr) {
-        LOGI("gifski obj is null");
+        logStr(env, "gifski obj is null");
     } else {
-        LOGI("gifski obj valid");
+        logStr(env, "gifski obj valid");
 
 //        FILE *fp = fopen("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/output.gif", "wb");
 //        fwrite("GIF89a", 6, 1, fp);
@@ -27,7 +27,7 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type, jint width, jint height) {
 //        LOGI("next gifski api");
 
         GifskiError error = gifski_set_file_output(env, instance, "/storage/emulated/0/Android/data/com.lingyx.gifgski/files/3476/output.gif");
-        LOGI("gifski set file output result: %d", error);
+        logStrI(env, "gifski set file output result: %d", error);
         if (error != GIFSKI_OK) return 2232;
 
         for (int i = 0; i <= 42; i++) {
@@ -54,7 +54,7 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type, jint width, jint height) {
 //            int res = gifski_add_frame_rgba(env, instance, i, width, height, data, 5);
 
             int res = gifski_add_frame_png_file(env, instance, i, "sdksdds", 5);
-            LOGI("gifski file path: %s end:%d", "ddd", res);
+//            logStrI(env, "gifski file path: %s end:%d", "ddd", res);
             if (res != GIFSKI_OK) break;
         }
 
@@ -70,9 +70,9 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type, jint width, jint height) {
 //            if (res != GIFSKI_OK) break;
 //        }
 
-        LOGI("loop finish before");
+        logStr(env, "loop finish before");
         int res = gifski_finish(instance);
-        LOGI("loop finish:%d", res);
+        logStrI(env, "loop finish:%d", res);
         if (res != GIFSKI_OK) return 9120;
     }
     return 21342;

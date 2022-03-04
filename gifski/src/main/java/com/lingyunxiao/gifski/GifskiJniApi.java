@@ -11,4 +11,8 @@ public class GifskiJniApi {
     public static void logit(String msg) {
         MLog.info("gifski", msg);
     }
+
+    public static void logit(String msg, int argi) {
+        MLog.info("gifski", msg, argi);
+    }
 }
