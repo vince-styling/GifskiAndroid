@@ -9,6 +9,8 @@ public class GifskiJniApi {
 
     public static native int setFileOutput(long instancePtr, String filePath);
 
+    public static native void setProgressCallback(long instancePtr);
+
     public static native int addFrameRgba(
             long instancePtr, Bitmap bitmap,
             int index, int width, int height, int delay);

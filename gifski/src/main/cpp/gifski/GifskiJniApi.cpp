@@ -29,6 +29,17 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
     }
 }
 
+JNIEXPORT void JNICALL
+JNI_FUNC(setProgressCallback)(JNIEnv *env, jclass type, jlong instancePtr) {
+    struct ProgressCallback {
+        static int onFrameWrited(void *user_data) {
+            return 1;
+        }
+    };
+    auto *instance = (gifski *) instancePtr;
+    gifski_set_progress_callback(instance, ProgressCallback::onFrameWrited, nullptr);
+}
+
 JNIEXPORT int JNICALL
 JNI_FUNC(setFileOutput)(JNIEnv *env, jclass type,
                         jlong instancePtr, jstring filePath) {

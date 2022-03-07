@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         Log.i("gifski", "new instancePtr:$gifskiNativeObj")
         if (gifskiNativeObj == 0L) return
         try {
+            GifskiJniApi.setProgressCallback(gifskiNativeObj)
             val filesDir = getExternalFilesDir(null)!!
             val result = GifskiJniApi.setFileOutput(gifskiNativeObj, "$filesDir/4234_png/output.gif")
             Log.i("gifski", "result means:${parseGifskiResult(result)}")
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
         Log.i("gifski", "frame size:${frameList.size}")
         for ((index, frame) in frameList.withIndex()) {
+            // TODO : 测试半途放弃，看 gifski 内部的线程处理机制
             val bitmap = BitmapFactory.decodeFile(frame)
             val result = GifskiJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, 5)
 //            val op = BitmapFactory.Options()

@@ -14,6 +14,9 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
                     jint width, jint height, jshort quality,
                     jboolean fast, jboolean repeat);
 
+JNIEXPORT void JNICALL
+JNI_FUNC(setProgressCallback)(JNIEnv *env, jclass type, jlong instancePtr);
+
 JNIEXPORT int JNICALL
 JNI_FUNC(setFileOutput)(JNIEnv *env, jclass type,
                         jlong instancePtr, jstring filePath);
