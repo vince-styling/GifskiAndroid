@@ -13,6 +13,14 @@ public class GifskiJniApi {
             long instancePtr, Bitmap bitmap,
             int index, int width, int height, int delay);
 
+//    public static native int addFrameRgb(
+//            long instancePtr, Bitmap bitmap,
+//            int index, int width, int height, int rowBytes, int delay);
+
+//    public static native int addFrameARgb(
+//            long instancePtr, Bitmap bitmap,
+//            int index, int width, int height, int rowBytes, int delay);
+
     public static native int finish(long instancePtr);
 
     static {

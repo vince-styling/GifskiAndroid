@@ -23,6 +23,16 @@ JNI_FUNC(addFrameRgba)(JNIEnv *env, jclass type,
                        jlong instancePtr, jobject bitmap,
                        jint index, jint width, jint height, jint delay);
 
+//JNIEXPORT int JNICALL
+//JNI_FUNC(addFrameRgb)(JNIEnv *env, jclass type,
+//                       jlong instancePtr, jobject bitmap,
+//                       jint index, jint width, jint height, jint rowBytes, jint delay);
+
+//JNIEXPORT int JNICALL
+//JNI_FUNC(addFrameARgb)(JNIEnv *env, jclass type,
+//                       jlong instancePtr, jobject bitmap,
+//                       jint index, jint width, jint height, jint rowBytes, jint delay);
+
 JNIEXPORT int JNICALL
 JNI_FUNC(finish)(JNIEnv *env, jclass type, jlong instancePtr);
 

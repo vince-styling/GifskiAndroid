@@ -184,7 +184,7 @@ Colors are in sRGB, uncorrelated ARGB, with alpha byte first.
 
 `gifski_add_frame_rgba` is preferred over this function.
 */
-GifskiError gifski_add_frame_argb(gifski *handle,
+GifskiError gifski_add_frame_argb(JNIEnv *env, gifski *handle,
                                   uint32_t frame_number,
                                   uint32_t width,
                                   uint32_t bytes_per_row,
@@ -201,7 +201,7 @@ Colors are in sRGB, red byte first.
 
 `gifski_add_frame_rgba` is preferred over this function.
 */
-GifskiError gifski_add_frame_rgb(gifski *handle,
+GifskiError gifski_add_frame_rgb(JNIEnv *env, gifski *handle,
                                  uint32_t frame_number,
                                  uint32_t width,
                                  uint32_t bytes_per_row,

@@ -35,14 +35,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun process() {
         Log.i("gifski", "start")
-        val targetWidth = 1080
-        val targetHeight = 2340
+        val targetWidth = 675
+        val targetHeight = 1200
         val gifskiNativeObj = GifskiJniApi.gifskiNew(targetWidth, targetHeight, 90, false, true)
         Log.i("gifski", "new instancePtr:$gifskiNativeObj")
         if (gifskiNativeObj == 0L) return
         try {
             val filesDir = getExternalFilesDir(null)!!
-            val result = GifskiJniApi.setFileOutput(gifskiNativeObj, "$filesDir/3476/output.gif")
+            val result = GifskiJniApi.setFileOutput(gifskiNativeObj, "$filesDir/4234_png/output.gif")
             Log.i("gifski", "result means:${parseGifskiResult(result)}")
             if (result == 0) pushFrameList(gifskiNativeObj, targetWidth, targetHeight)
         } catch (e: Throwable) {
@@ -56,14 +56,21 @@ class MainActivity : AppCompatActivity() {
     private fun pushFrameList(gifskiNativeObj: Long, targetWidth: Int, targetHeight: Int) {
         val frameList = mutableListOf<String>()
         val filesDir = getExternalFilesDir(null)!!
-        for (index in 0..34) {
+        for (index in 0..316) {
             val frameName = "${index.toString().padStart(6, '0')}.png"
-            frameList.add("$filesDir/3476/$frameName")
+            frameList.add("$filesDir/4234_png/$frameName")
         }
         Log.i("gifski", "frame size:${frameList.size}")
         for ((index, frame) in frameList.withIndex()) {
             val bitmap = BitmapFactory.decodeFile(frame)
             val result = GifskiJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, 5)
+//            val op = BitmapFactory.Options()
+//            op.inScaled = false
+//            op.inPreferredConfig = Bitmap.Config.ARGB_8888
+//            val bitmap = BitmapFactory.decodeFile(frame, op)
+//            Log.i("gifski", "rowBytes:${bitmap.rowBytes}")
+//            val result = GifskiJniApi.addFrameRgb(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, bitmap.rowBytes, 5)
+//            val result = GifskiJniApi.addFrameARgb(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, bitmap.rowBytes, 5)
             if (result != 0) {
                 Log.i("gifski", "push frame result means:${parseGifskiResult(result)}")
                 return

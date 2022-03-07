@@ -9,15 +9,15 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
 
     auto *set = new GifskiSettings();
     set->width = width;
-    logStrI(env, "width:%d", width);
+    logStrI(env, "width:%d", set->width);
     set->height = height;
-    logStrI(env, "height:%d", height);
+    logStrI(env, "height:%d", set->height);
     set->quality = quality;
-    logStrI(env, "quality:%d", quality);
+    logStrI(env, "quality:%d", set->quality);
     set->fast = fast;
-    logStrB(env, "fast:%s", fast);
+    logStrB(env, "fast:%s", set->fast);
     set->repeat = repeat;
-    logStrB(env, "repeat:%s", repeat);
+    logStrB(env, "repeat:%s", set->repeat);
 
     gifski *instance = gifski_new(env, set);
     if (instance == nullptr) {
@@ -48,11 +48,43 @@ JNI_FUNC(addFrameRgba)(JNIEnv *env, jclass type,
     auto *instance = (gifski *) instancePtr;
     auto *data = static_cast<unsigned char *>(lockBitmapPixels(env, bitmap));
     if (data != nullptr) {
-        return gifski_add_frame_rgba(env, instance, index, width, height, data, delay);
+        GifskiError result = gifski_add_frame_rgba(env, instance, index, width, height, data, delay);
+        AndroidBitmap_unlockPixels(env, bitmap);
+        return result;
     }
     // 扩展自 GifskiError 的错误索引
     return 16;
 }
+
+//JNIEXPORT int JNICALL
+//JNI_FUNC(addFrameRgb)(JNIEnv *env, jclass type,
+//                      jlong instancePtr, jobject bitmap,
+//                      jint index, jint width, jint height, jint rowBytes, jint delay) {
+//    auto *instance = (gifski *) instancePtr;
+//    auto *data = static_cast<unsigned char *>(lockBitmapPixels(env, bitmap));
+//    if (data != nullptr) {
+//        GifskiError result = gifski_add_frame_rgb(env, instance, index, width, rowBytes, height, data, delay);
+//        AndroidBitmap_unlockPixels(env, bitmap);
+//        return result;
+//    }
+//    // 扩展自 GifskiError 的错误索引
+//    return 16;
+//}
+
+//JNIEXPORT int JNICALL
+//JNI_FUNC(addFrameARgb)(JNIEnv *env, jclass type,
+//                      jlong instancePtr, jobject bitmap,
+//                      jint index, jint width, jint height, jint rowBytes, jint delay) {
+//    auto *instance = (gifski *) instancePtr;
+//    auto *data = static_cast<unsigned char *>(lockBitmapPixels(env, bitmap));
+//    if (data != nullptr) {
+//        GifskiError result = gifski_add_frame_argb(env, instance, index, width, rowBytes, height, data, delay);
+//        AndroidBitmap_unlockPixels(env, bitmap);
+//        return result;
+//    }
+//    // 扩展自 GifskiError 的错误索引
+//    return 16;
+//}
 
 JNIEXPORT int JNICALL
 JNI_FUNC(finish)(JNIEnv *env, jclass type, jlong instancePtr) {
