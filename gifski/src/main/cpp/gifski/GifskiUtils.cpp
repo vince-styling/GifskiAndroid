@@ -19,6 +19,14 @@ void *logStrI(JNIEnv *env, const char *log, jint iarg) {
     return nullptr;
 }
 
+void *logStrS(JNIEnv *env, const char *log, jstring sarg) {
+    jclass jjniApi = env->FindClass(JNI_CLASS);
+    jmethodID mLogit = env->GetStaticMethodID(jjniApi, METHOD_NAME, "(Ljava/lang/String;Ljava/lang/String;)V");
+    jstring jlog = env->NewStringUTF(log);
+    env->CallStaticVoidMethod(jjniApi, mLogit, jlog, sarg);
+    return nullptr;
+}
+
 void *logStrL(JNIEnv *env, const char *log, long iarg) {
     jclass jjniApi = env->FindClass(JNI_CLASS);
     jmethodID mLogit = env->GetStaticMethodID(jjniApi, METHOD_NAME, "(Ljava/lang/String;J)V");

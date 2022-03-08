@@ -10,6 +10,7 @@ extern "C" {
 
 void *logStrB(JNIEnv *env, const char *log, jboolean barg);
 void *logStrI(JNIEnv *env, const char *log, jint iarg);
+void *logStrS(JNIEnv *env, const char *log, jstring sarg);
 void *logStrL(JNIEnv *env, const char *log, long iarg);
 void *logStr(JNIEnv *env, const char *log);
 

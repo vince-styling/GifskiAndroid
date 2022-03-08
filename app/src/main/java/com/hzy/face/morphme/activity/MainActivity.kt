@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,6 +18,8 @@ import com.lingyunxiao.gifski.MLog
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+    private val taskKey = 4234
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,6 +31,10 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 }
             }).start()
+
+            findViewById<View>(R.id.btn_discard).setOnClickListener {
+                GifskiJniApi.abort(taskKey)
+            }
         } else {
             getRuntimePermissions()
         }
@@ -41,15 +48,15 @@ class MainActivity : AppCompatActivity() {
         Log.i("gifski", "new instancePtr:$gifskiNativeObj")
         if (gifskiNativeObj == 0L) return
         try {
-            GifskiJniApi.setProgressCallback(gifskiNativeObj)
             val filesDir = getExternalFilesDir(null)!!
-            val result = GifskiJniApi.setFileOutput(gifskiNativeObj, "$filesDir/4234_png/output.gif")
+            val result = GifskiJniApi.startProcess(gifskiNativeObj, "$filesDir/4234_png/output.gif", taskKey)
             Log.i("gifski", "result means:${parseGifskiResult(result)}")
             if (result == 0) pushFrameList(gifskiNativeObj, targetWidth, targetHeight)
         } catch (e: Throwable) {
             Log.e("gifski", "process error", e)
         } finally {
-            GifskiJniApi.finish(gifskiNativeObj)
+            val result = GifskiJniApi.finish(gifskiNativeObj)
+            Log.i("gifski", "finish result means:${parseGifskiResult(result)}")
         }
         Log.i("gifski", "end")
     }

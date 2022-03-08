@@ -7,9 +7,7 @@ public class GifskiJniApi {
     public static native long gifskiNew(
             int width, int height, short quality, boolean fast, boolean repeat);
 
-    public static native int setFileOutput(long instancePtr, String filePath);
-
-    public static native void setProgressCallback(long instancePtr);
+    public static native int startProcess(long instancePtr, String filePath, int key);
 
     public static native int addFrameRgba(
             long instancePtr, Bitmap bitmap,
@@ -25,6 +23,8 @@ public class GifskiJniApi {
 
     public static native int finish(long instancePtr);
 
+    public static native void abort(int key);
+
     static {
         System.loadLibrary("gifskiad");
     }
@@ -39,6 +39,10 @@ public class GifskiJniApi {
 
     public static void logit(String msg, boolean barg) {
         MLog.info("gifski", msg, barg);
+    }
+
+    public static void logit(String msg, String sarg) {
+        MLog.info("gifski", msg, sarg);
     }
 
     public static void logit(String msg, int argi) {

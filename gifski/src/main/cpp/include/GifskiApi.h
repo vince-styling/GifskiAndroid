@@ -224,7 +224,7 @@ GifskiError gifski_add_frame_rgb(JNIEnv *env, gifski *handle,
  *
  * This function must be called before `gifski_set_file_output()` to take effect.
  */
-void gifski_set_progress_callback(gifski *handle, int (*progress_callback)(void *user_data), void *user_data);
+void gifski_set_progress_callback(gifski *handle, int (*progress_callback)(int user_data, int ordinal_frame_number), int user_data);
 
 /**
  * Start writing to the file at `destination_path` (overwrites if needed).
@@ -252,7 +252,7 @@ GifskiError gifski_set_file_output(JNIEnv *env, gifski *handle, const char *dest
  *
  * Returns 0 (`GIFSKI_OK`) on success, and non-0 `GIFSKI_*` constant on error.
  */
-GifskiError gifski_set_write_callback(gifski *handle,
+GifskiError gifski_set_write_callback(JNIEnv *env, gifski *handle,
                                       int (*write_callback)(size_t buffer_length, const uint8_t *buffer, void *user_data),
                                       void *user_data);
 
@@ -268,7 +268,7 @@ GifskiError gifski_set_write_callback(gifski *handle,
  *
  * Returns 0 (`GIFSKI_OK`) on success, and non-0 `GIFSKI_*` constant on error.
  */
-GifskiError gifski_finish(gifski *g);
+GifskiError gifski_finish(JNIEnv *env, gifski *g);
 
 #ifdef __cplusplus
 }
