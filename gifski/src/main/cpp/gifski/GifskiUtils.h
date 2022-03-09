@@ -8,6 +8,8 @@ extern "C" {
 #include <jni.h>
 #include <android/bitmap.h>
 
+void *serveLoggerClass(JNIEnv *env);
+void *releaseLoggerClass(JNIEnv *env);
 void *logStrB(JNIEnv *env, const char *log, jboolean barg);
 void *logStrI(JNIEnv *env, const char *log, jint iarg);
 void *logStrS(JNIEnv *env, const char *log, jstring sarg);

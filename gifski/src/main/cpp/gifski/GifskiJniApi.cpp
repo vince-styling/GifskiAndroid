@@ -4,18 +4,6 @@
 #include <pthread.h>
 
 static JavaVM *gJvm;
-jclass loggerClass;
-
-#define JNI_CLASS "com/lingyunxiao/gifski/GifskiJniApi"
-#define METHOD_NAME "logit"
-
-static void *logStrSS(JNIEnv *env, const char *log) {
-//    jclass jjniApi = env->FindClass(JNI_CLASS);
-    jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;)V");
-    jstring jlog = env->NewStringUTF(log);
-    env->CallStaticVoidMethod(loggerClass, mLogit, jlog);
-    return nullptr;
-}
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *pjvm, void *reserved) {
     gJvm = pjvm;
@@ -26,11 +14,8 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *pjvm, void *reserved) {
     }
 
     // https://zhuanlan.zhihu.com/p/362225059
-    jclass test = env->FindClass(JNI_CLASS);
-    loggerClass = (jclass)(env->NewGlobalRef(test));
-    env->DeleteLocalRef(test);
-
-    logStrSS(env, "JNI_OnLoad");
+    serveLoggerClass(env);
+    logStr(env, "JNI_OnLoad");
 
     return JNI_VERSION_1_6;
 }
@@ -49,11 +34,10 @@ JNIEnv *GetJniEnv() {
     // is attached. This is done to avoid setting up a DetachCurrentThread
     // call on a Java thread.
 
-    // g_vm is a global.
+    // gJvm is a global.
     auto get_env_result = gJvm->GetEnv((void**)&env, JNI_VERSION_1_6);
     if (get_env_result == JNI_EDETACHED) {
         if (gJvm->AttachCurrentThread(&env, NULL) == JNI_OK) {
-
             // defer thread detach
             static pthread_key_t thread_key;
 
@@ -83,7 +67,6 @@ JNIEnv *GetJniEnv() {
                     // Failed to set thread-specific value for key. Throw an exception if you want to.
                 }
             }
-
         } else {
             // Failed to attach thread. Throw an exception if you want to.
         }
@@ -133,7 +116,7 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
         static int onFrameWrited(int user_data, int ordinal_frame_number) {
             // TODO : 如何实现进度回调呢？？
             auto env = GetJniEnv();
-            logStrSS(env, "haha user data");
+            logStr(env, "haha user data");
             __android_log_print(ANDROID_LOG_INFO, "gifski", "%d frame writed:%d", taskKey, ordinal_frame_number);
 //            __android_log_print(ANDROID_LOG_INFO, "gifski", "user data:%d", user_data);
             return user_data == taskKey ? 1 : 0;
@@ -184,12 +167,6 @@ JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved) {
     if (vm->GetEnv((void **)(&env), JNI_VERSION_1_6) != JNI_OK) {
         return;
     }
-
     gJvm = nullptr;
-
-    //删除全局变量
-    if (loggerClass != nullptr) {
-        env->DeleteGlobalRef(loggerClass);
-        loggerClass = nullptr;
-    }
+    releaseLoggerClass(env);
 }
