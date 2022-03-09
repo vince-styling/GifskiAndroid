@@ -114,9 +114,9 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
     logStrI(env, "start process task key:%s", taskKey);
     struct ProgressCallback {
         static int onFrameWrited(int user_data, int ordinal_frame_number) {
-            // TODO : 如何实现进度回调呢？？
             auto env = GetJniEnv();
             logStr(env, "frame writed:%d taskKey:%d userKey:%d", ordinal_frame_number, taskKey, user_data);
+            progressCallback(env, ordinal_frame_number, user_data);
             return user_data == taskKey ? 1 : 0;
         }
     };

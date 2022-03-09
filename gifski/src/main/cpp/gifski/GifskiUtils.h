@@ -14,6 +14,8 @@ void *logStrB(JNIEnv *env, const char *log, bool barg);
 void *logStrI(JNIEnv *env, const char *log, int iarg);
 void *logStr(JNIEnv *env, const char *format, ...);
 
+void *progressCallback(JNIEnv *env, int frameNumber, int taskKey);
+
 /**
  * lock android bitmap and return data and write info
  * @param env

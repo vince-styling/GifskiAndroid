@@ -21,15 +21,19 @@ public class GifskiJniApi {
         System.loadLibrary("gifskiad");
     }
 
+    public static void onFrameWrited(int frameNumber, int taskKey) {
+        InstanceKeeper.progressCallback.onFrameWrited(frameNumber, taskKey);
+    }
+
     public static void logit(String msg) {
-        MLog.info("gifski", msg);
+        InstanceKeeper.logger.logit(msg);
     }
 
-    public static void logit(String msg, boolean barg) {
-        MLog.info("gifski", msg, barg);
+    public static void logit(String msg, boolean arg) {
+        InstanceKeeper.logger.logit(msg, arg);
     }
 
-    public static void logit(String msg, int argi) {
-        MLog.info("gifski", msg, argi);
+    public static void logit(String msg, int arg) {
+        InstanceKeeper.logger.logit(msg, arg);
     }
 }

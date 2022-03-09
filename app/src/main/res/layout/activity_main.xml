@@ -6,17 +6,27 @@
     android:gravity="center">
 
     <TextView
+        android:id="@+id/txv_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World"
-        android:textSize="20sp"/>
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="18sp"/>
 
     <Button
-        android:id="@+id/btn_discard"
+        android:id="@+id/btn_abort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="discard"
+        android:text="abort"
         android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/txv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
         android:layout_marginTop="10dp"/>
 
 </LinearLayout>

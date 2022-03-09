@@ -1,4 +1,4 @@
-package com.lingyunxiao.gifski;
+package com.hzy.face.morphme.activity;
 
 import android.util.Log;
 

@@ -14,11 +14,15 @@ import androidx.core.content.ContextCompat
 import com.hzy.face.morphme.R
 import com.lingyunxiao.gifski.GifskiJniApi
 import com.lingyunxiao.gifski.GifskiUtil.parseGifskiResult
-import com.lingyunxiao.gifski.MLog
+import com.lingyunxiao.gifski.ILogger
+import com.lingyunxiao.gifski.InstanceKeeper
+import com.lingyunxiao.gifski.ProgressCallback
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val taskKey = 4234
+    private val frameCount = 317
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +30,18 @@ class MainActivity : AppCompatActivity() {
 
         if (allPermissionsGranted()) {
             Thread(Runnable {
-                process()
+                setupGifski()
+                val result = process()
+                val resultStr = parseGifskiResult(result)
+                MLog.info(TAG, "finish result means:$resultStr")
                 Handler(Looper.getMainLooper()).post {
-                    finish()
+                    txv_result.text = "已完成：$resultStr"
+                    btn_abort.visibility = View.GONE
+//                    finish()
                 }
             }).start()
 
-            findViewById<View>(R.id.btn_discard).setOnClickListener {
+            btn_abort.setOnClickListener {
                 GifskiJniApi.abort(taskKey)
             }
         } else {
@@ -40,52 +49,75 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun process() {
-        Log.i("gifski", "start")
+    private fun setupGifski() {
+        InstanceKeeper.logger = object : ILogger {
+            override fun logit(msg: String) {
+                MLog.info(TAG, msg)
+            }
+
+            override fun logit(msg: String, arg: Boolean) {
+                MLog.info(TAG, msg, arg)
+            }
+
+            override fun logit(msg: String, arg: Int) {
+                MLog.info(TAG, msg, arg)
+            }
+        }
+        InstanceKeeper.progressCallback = ProgressCallback { frameNumber, taskKey ->
+            MLog.info(TAG, "received progress:$frameNumber $taskKey")
+            if (taskKey == this.taskKey) {
+                Handler(Looper.getMainLooper()).post {
+                    txv_progress.text = String.format("处理进度：%.2f%%", (frameNumber / frameCount.toFloat()) * 100)
+                }
+            }
+        }
+    }
+
+    private fun process(): Int {
+        MLog.info(TAG, "start")
         val targetWidth = 675
         val targetHeight = 1200
         val gifskiNativeObj = GifskiJniApi.gifskiNew(targetWidth, targetHeight, 90, false, true)
-        Log.i("gifski", "new instancePtr:$gifskiNativeObj")
-        if (gifskiNativeObj == 0L) return
+        MLog.info(TAG, "new instancePtr:$gifskiNativeObj")
+        if (gifskiNativeObj == 0L) return -1
         try {
             val filesDir = getExternalFilesDir(null)!!
             val result = GifskiJniApi.startProcess(gifskiNativeObj, "$filesDir/4234_png/output.gif", taskKey)
-            Log.i("gifski", "result means:${parseGifskiResult(result)}")
+            MLog.info(TAG, "result means:${parseGifskiResult(result)}")
             if (result == 0) pushFrameList(gifskiNativeObj, targetWidth, targetHeight)
         } catch (e: Throwable) {
-            Log.e("gifski", "process error", e)
+            Log.e(TAG, "process error", e)
         } finally {
-            val result = GifskiJniApi.finish(gifskiNativeObj)
-            Log.i("gifski", "finish result means:${parseGifskiResult(result)}")
+            MLog.info(TAG, "end")
+            return GifskiJniApi.finish(gifskiNativeObj)
         }
-        Log.i("gifski", "end")
     }
 
     private fun pushFrameList(gifskiNativeObj: Long, targetWidth: Int, targetHeight: Int) {
         val frameList = mutableListOf<String>()
         val filesDir = getExternalFilesDir(null)!!
-        for (index in 0..316) {
+        for (index in 0 until frameCount) {
             val frameName = "${index.toString().padStart(6, '0')}.png"
             frameList.add("$filesDir/4234_png/$frameName")
         }
-        Log.i("gifski", "frame size:${frameList.size}")
+        MLog.info(TAG, "frame size:${frameList.size}")
         for ((index, frame) in frameList.withIndex()) {
-            // TODO : 测试半途放弃，看 gifski 内部的线程处理机制
+            // TODO : 实现半途放弃退出页面，确认 gifski 内部会 abort
             val bitmap = BitmapFactory.decodeFile(frame)
             val result = GifskiJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, 5)
 //            val op = BitmapFactory.Options()
 //            op.inScaled = false
 //            op.inPreferredConfig = Bitmap.Config.ARGB_8888
 //            val bitmap = BitmapFactory.decodeFile(frame, op)
-//            Log.i("gifski", "rowBytes:${bitmap.rowBytes}")
+//            MLog.info(TAG, "rowBytes:${bitmap.rowBytes}")
 //            val result = GifskiJniApi.addFrameRgb(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, bitmap.rowBytes, 5)
 //            val result = GifskiJniApi.addFrameARgb(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, bitmap.rowBytes, 5)
             if (result != 0) {
-                Log.i("gifski", "push frame result means:${parseGifskiResult(result)}")
+                MLog.info(TAG, "push frame result means:${parseGifskiResult(result)}")
                 return
             }
         }
-        Log.i("gifski", "done to push ${frameList.size} frames")
+        MLog.info(TAG, "done to push ${frameList.size} frames")
     }
 
     private fun getRequiredPermissions(): Array<String?> {

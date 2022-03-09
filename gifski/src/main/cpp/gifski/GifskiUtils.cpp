@@ -4,34 +4,34 @@
 #define JNI_CLASS "com/lingyunxiao/gifski/GifskiJniApi"
 #define METHOD_NAME "logit"
 
-jclass loggerClass;
+jclass jniApiClass;
 
 void *serveLoggerClass(JNIEnv *env) {
     jclass jniClass = env->FindClass(JNI_CLASS);
-    loggerClass = (jclass) (env->NewGlobalRef(jniClass));
+    jniApiClass = (jclass) (env->NewGlobalRef(jniClass));
     env->DeleteLocalRef(jniClass);
     return nullptr;
 }
 
 void *releaseLoggerClass(JNIEnv *env) {
-    if (loggerClass != nullptr) {
-        env->DeleteGlobalRef(loggerClass);
-        loggerClass = nullptr;
+    if (jniApiClass != nullptr) {
+        env->DeleteGlobalRef(jniApiClass);
+        jniApiClass = nullptr;
     }
     return nullptr;
 }
 
 void *logStrB(JNIEnv *env, const char *log, bool barg) {
-    jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;Z)V");
+    jmethodID mLogit = env->GetStaticMethodID(jniApiClass, METHOD_NAME, "(Ljava/lang/String;Z)V");
     jstring jlog = env->NewStringUTF(log);
-    env->CallStaticVoidMethod(loggerClass, mLogit, jlog, barg);
+    env->CallStaticVoidMethod(jniApiClass, mLogit, jlog, barg);
     return nullptr;
 }
 
 void *logStrI(JNIEnv *env, const char *log, int iarg) {
-    jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;I)V");
+    jmethodID mLogit = env->GetStaticMethodID(jniApiClass, METHOD_NAME, "(Ljava/lang/String;I)V");
     jstring jlog = env->NewStringUTF(log);
-    env->CallStaticVoidMethod(loggerClass, mLogit, jlog, iarg);
+    env->CallStaticVoidMethod(jniApiClass, mLogit, jlog, iarg);
     return nullptr;
 }
 
@@ -41,9 +41,15 @@ void *logStr(JNIEnv *env, const char *format, ...) {
     va_start(args, format);
     vsprintf(buffer, format, args);
     va_end(args);
-    jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;)V");
+    jmethodID mLogit = env->GetStaticMethodID(jniApiClass, METHOD_NAME, "(Ljava/lang/String;)V");
     jstring jlog = env->NewStringUTF(buffer);
-    env->CallStaticVoidMethod(loggerClass, mLogit, jlog);
+    env->CallStaticVoidMethod(jniApiClass, mLogit, jlog);
+    return nullptr;
+}
+
+void *progressCallback(JNIEnv *env, int frameNumber, int taskKey) {
+    jmethodID cb = env->GetStaticMethodID(jniApiClass, "onFrameWrited", "(II)V");
+    env->CallStaticVoidMethod(jniApiClass, cb, frameNumber, taskKey);
     return nullptr;
 }
 
