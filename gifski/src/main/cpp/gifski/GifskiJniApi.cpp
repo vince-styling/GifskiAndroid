@@ -84,11 +84,11 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
                     jboolean fast, jboolean repeat) {
     auto *set = new GifskiSettings();
     set->width = width;
-    logStrI(env, "width:%d", set->width);
+    logStr(env, "width:%d", set->width);
     set->height = height;
-    logStrI(env, "height:%d", set->height);
+    logStr(env, "height:%d", set->height);
     set->quality = quality;
-    logStrI(env, "quality:%d", set->quality);
+    logStr(env, "quality:%d", set->quality);
     set->fast = fast;
     logStrB(env, "fast:%s", set->fast);
     set->repeat = repeat;
@@ -107,7 +107,7 @@ JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
 JNIEXPORT int JNICALL
 JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
                         jlong instancePtr, jstring filePath, jint key) {
-    logStrL(env, "set file output:%d", instancePtr);
+    logStr(env, "set file output:%d", instancePtr);
     auto *instance = (gifski *) instancePtr;
 
     taskKey = key;
@@ -116,9 +116,7 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
         static int onFrameWrited(int user_data, int ordinal_frame_number) {
             // TODO : 如何实现进度回调呢？？
             auto env = GetJniEnv();
-            logStr(env, "haha user data");
-            __android_log_print(ANDROID_LOG_INFO, "gifski", "%d frame writed:%d", taskKey, ordinal_frame_number);
-//            __android_log_print(ANDROID_LOG_INFO, "gifski", "user data:%d", user_data);
+            logStr(env, "frame writed:%d taskKey:%d userKey:%d", ordinal_frame_number, taskKey, user_data);
             return user_data == taskKey ? 1 : 0;
         }
     };
@@ -126,7 +124,7 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
 
     const char *ntvFilePath = env->GetStringUTFChars(filePath, nullptr);
     GifskiError result = gifski_set_file_output(env, instance, ntvFilePath);
-    logStrI(env, "set file output result:%d", result);
+    logStr(env, "set file output result:%d", result);
     env->ReleaseStringUTFChars(filePath, ntvFilePath);
     return result;
 }
@@ -152,13 +150,13 @@ JNI_FUNC(finish)(JNIEnv *env, jclass type, jlong instancePtr) {
     auto *instance = (gifski *) instancePtr;
     logStr(env, "start to finish");
     int result = gifski_finish(env, instance);
-    logStrI(env, "finish result:%d", result);
+    logStr(env, "finish result:%d", result);
     return result;
 }
 
 JNIEXPORT void JNICALL
 JNI_FUNC(abort)(JNIEnv *env, jclass type, jint key) {
-    logStrI(env, "abort: %d", taskKey);
+    logStr(env, "abort: %d", taskKey);
     taskKey = 0;
 }
 

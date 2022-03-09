@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "GifskiUtils.h"
 
 #define JNI_CLASS "com/lingyunxiao/gifski/GifskiJniApi"
@@ -20,37 +21,28 @@ void *releaseLoggerClass(JNIEnv *env) {
     return nullptr;
 }
 
-void *logStrB(JNIEnv *env, const char *log, jboolean barg) {
+void *logStrB(JNIEnv *env, const char *log, bool barg) {
     jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;Z)V");
     jstring jlog = env->NewStringUTF(log);
     env->CallStaticVoidMethod(loggerClass, mLogit, jlog, barg);
     return nullptr;
 }
 
-void *logStrI(JNIEnv *env, const char *log, jint iarg) {
+void *logStrI(JNIEnv *env, const char *log, int iarg) {
     jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;I)V");
     jstring jlog = env->NewStringUTF(log);
     env->CallStaticVoidMethod(loggerClass, mLogit, jlog, iarg);
     return nullptr;
 }
 
-void *logStrS(JNIEnv *env, const char *log, jstring sarg) {
-    jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;Ljava/lang/String;)V");
-    jstring jlog = env->NewStringUTF(log);
-    env->CallStaticVoidMethod(loggerClass, mLogit, jlog, sarg);
-    return nullptr;
-}
-
-void *logStrL(JNIEnv *env, const char *log, long iarg) {
-    jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;J)V");
-    jstring jlog = env->NewStringUTF(log);
-    env->CallStaticVoidMethod(loggerClass, mLogit, jlog, iarg);
-    return nullptr;
-}
-
-void *logStr(JNIEnv *env, const char *log) {
+void *logStr(JNIEnv *env, const char *format, ...) {
+    char buffer[256];
+    va_list args;
+    va_start(args, format);
+    vsprintf(buffer, format, args);
+    va_end(args);
     jmethodID mLogit = env->GetStaticMethodID(loggerClass, METHOD_NAME, "(Ljava/lang/String;)V");
-    jstring jlog = env->NewStringUTF(log);
+    jstring jlog = env->NewStringUTF(buffer);
     env->CallStaticVoidMethod(loggerClass, mLogit, jlog);
     return nullptr;
 }
