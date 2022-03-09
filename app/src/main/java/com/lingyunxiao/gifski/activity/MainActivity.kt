@@ -74,11 +74,11 @@ class MainActivity : AppCompatActivity() {
                 MLog.info(TAG, msg, arg)
             }
         }
-        InstanceKeeper.progressCallback = ProgressCallback { frameNumber, taskKey ->
-            MLog.info(TAG, "received progress:$frameNumber $taskKey")
+        InstanceKeeper.progressCallback = ProgressCallback { writeCount, taskKey ->
+            MLog.info(TAG, "received progress:$writeCount $taskKey")
             if (taskKey == this.taskKey) {
                 Handler(Looper.getMainLooper()).post {
-                    txv_progress.text = String.format("处理进度：%.2f%%", (frameNumber / frameCount.toFloat()) * 100)
+                    txv_progress.text = String.format("处理进度：%.2f%%", (writeCount / frameCount.toFloat()) * 100)
                 }
             }
         }

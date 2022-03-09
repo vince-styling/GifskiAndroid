@@ -113,10 +113,10 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
     taskKey = key;
     logStrI(env, "start process task key:%s", taskKey);
     struct ProgressCallback {
-        static int onFrameWrited(int user_data, int ordinal_frame_number) {
+        static int onFrameWrited(int user_data, int write_count, int frame_number) {
             auto env = GetJniEnv();
-            logStr(env, "frame writed:%d taskKey:%d userKey:%d", ordinal_frame_number, taskKey, user_data);
-            progressCallback(env, ordinal_frame_number, user_data);
+            logStr(env, "frame writed:%d/%d task:%d user:%d", frame_number, write_count, taskKey, user_data);
+            progressCallback(env, write_count, user_data);
             return user_data == taskKey ? 1 : 0;
         }
     };

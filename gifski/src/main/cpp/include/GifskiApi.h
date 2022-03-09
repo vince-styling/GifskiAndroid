@@ -224,7 +224,7 @@ GifskiError gifski_add_frame_rgb(JNIEnv *env, gifski *handle,
  *
  * This function must be called before `gifski_set_file_output()` to take effect.
  */
-void gifski_set_progress_callback(gifski *handle, int (*progress_callback)(int user_data, int ordinal_frame_number), int user_data);
+void gifski_set_progress_callback(gifski *handle, int (*progress_callback)(int user_data, int write_count, int frame_number), int user_data);
 
 /**
  * Start writing to the file at `destination_path` (overwrites if needed).

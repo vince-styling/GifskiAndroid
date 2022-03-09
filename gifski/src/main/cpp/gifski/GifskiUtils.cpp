@@ -47,9 +47,9 @@ void *logStr(JNIEnv *env, const char *format, ...) {
     return nullptr;
 }
 
-void *progressCallback(JNIEnv *env, int frameNumber, int taskKey) {
+void *progressCallback(JNIEnv *env, int writeCount, int taskKey) {
     jmethodID cb = env->GetStaticMethodID(jniApiClass, "onFrameWrited", "(II)V");
-    env->CallStaticVoidMethod(jniApiClass, cb, frameNumber, taskKey);
+    env->CallStaticVoidMethod(jniApiClass, cb, writeCount, taskKey);
     return nullptr;
 }
 
