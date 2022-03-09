@@ -11,7 +11,7 @@ public class GifskiJniApi {
 
     public static native int addFrameRgba(
             long instancePtr, Bitmap bitmap,
-            int index, int width, int height, int delay);
+            int index, int width, int height, double pts);
 
     public static native int finish(long instancePtr);
 

@@ -103,17 +103,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun pushFrameList(gifskiNativeObj: Long, targetWidth: Int, targetHeight: Int) {
-        val frameList = mutableListOf<String>()
-        val filesDir = getExternalFilesDir(null)!!
-        for (index in 0 until frameCount) {
-            val frameName = "${index.toString().padStart(6, '0')}.png"
-            frameList.add("$filesDir/4234_png/$frameName")
-        }
+        val frameList = FrameListBuilder.build()
         MLog.info(TAG, "frame size:${frameList.size}")
         for ((index, frame) in frameList.withIndex()) {
             // TODO : 实现半途放弃退出页面，确认 gifski 内部会 abort
-            val bitmap = BitmapFactory.decodeFile(frame)
-            val result = GifskiJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, 5)
+            val bitmap = BitmapFactory.decodeFile(frame.file.absolutePath)
+            // Presentation timestamp (PTS) is time in seconds, since start of the file, when this frame is to be displayed
+            val pts = frame.timestampUs / 1000f / 1000.toDouble()
+            val result = GifskiJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, pts)
 //            val op = BitmapFactory.Options()
 //            op.inScaled = false
 //            op.inPreferredConfig = Bitmap.Config.ARGB_8888

@@ -24,7 +24,7 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
 JNIEXPORT int JNICALL
 JNI_FUNC(addFrameRgba)(JNIEnv *env, jclass type,
                        jlong instancePtr, jobject bitmap,
-                       jint index, jint width, jint height, jint delay);
+                       jint index, jint width, jint height, jdouble pts);
 
 JNIEXPORT void JNICALL
 JNI_FUNC(abort)(JNIEnv *env, jclass type, jint key);

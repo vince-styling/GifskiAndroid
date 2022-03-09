@@ -132,12 +132,11 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
 JNIEXPORT int JNICALL
 JNI_FUNC(addFrameRgba)(JNIEnv *env, jclass type,
                         jlong instancePtr, jobject bitmap,
-                        jint index, jint width, jint height, jint delay) {
-    // TODO : 实现 pts 计算
+                        jint index, jint width, jint height, jdouble pts) {
     auto *instance = (gifski *) instancePtr;
     auto *data = static_cast<unsigned char *>(lockBitmapPixels(env, bitmap));
     if (data != nullptr) {
-        GifskiError result = gifski_add_frame_rgba(env, instance, index, width, height, data, delay);
+        GifskiError result = gifski_add_frame_rgba(env, instance, index, width, height, data, pts);
         AndroidBitmap_unlockPixels(env, bitmap);
         return result;
     }
