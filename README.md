@@ -23,7 +23,7 @@ ffmpeg -i demo.mp4 frame%04d.png
 gifski -o anim.gif -W 1080 -H 2340 frame*.png
 
 du -sh output.gif
-adb pull /storage/emulated/0/Android/data/com.hzy.face.morphme/files/output.gif
+adb pull /storage/emulated/0/Android/data/com.lingyunxiao.gifski/files/output.gif
 
 cargo build --target aarch64-linux-android --release
 cp target/aarch64-linux-android/release/libgifski.a ~/dev/GifskiAndroid/gifski/src/main/cpp/arm64-v8a/

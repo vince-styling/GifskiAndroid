@@ -1,4 +1,4 @@
-package com.hzy.face.morphme.activity
+package com.lingyunxiao.gifski.activity
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -11,18 +11,21 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.hzy.face.morphme.R
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.lingyunxiao.gifski.GifskiJniApi
 import com.lingyunxiao.gifski.GifskiUtil.parseGifskiResult
 import com.lingyunxiao.gifski.ILogger
 import com.lingyunxiao.gifski.InstanceKeeper
 import com.lingyunxiao.gifski.ProgressCallback
+import com.lingyunxiao.gifski.R
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val taskKey = 4234
     private val frameCount = 317
+    private lateinit var outputFilePath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +34,21 @@ class MainActivity : AppCompatActivity() {
         if (allPermissionsGranted()) {
             Thread(Runnable {
                 setupGifski()
+                val filesDir = getExternalFilesDir(null)!!
+                outputFilePath = "$filesDir/4234_png/output.gif"
                 val result = process()
                 val resultStr = parseGifskiResult(result)
                 MLog.info(TAG, "finish result means:$resultStr")
                 Handler(Looper.getMainLooper()).post {
                     txv_result.text = "已完成：$resultStr"
                     btn_abort.visibility = View.GONE
-//                    finish()
+                    if (result == 0) {
+                        gif_preview.visibility = View.VISIBLE
+                        Glide.with(this)
+                            .load(outputFilePath)
+                            .transition(withCrossFade())
+                            .into(gif_preview)
+                    }
                 }
             }).start()
 
@@ -81,14 +92,12 @@ class MainActivity : AppCompatActivity() {
         MLog.info(TAG, "new instancePtr:$gifskiNativeObj")
         if (gifskiNativeObj == 0L) return -1
         try {
-            val filesDir = getExternalFilesDir(null)!!
-            val result = GifskiJniApi.startProcess(gifskiNativeObj, "$filesDir/4234_png/output.gif", taskKey)
+            val result = GifskiJniApi.startProcess(gifskiNativeObj, outputFilePath, taskKey)
             MLog.info(TAG, "result means:${parseGifskiResult(result)}")
             if (result == 0) pushFrameList(gifskiNativeObj, targetWidth, targetHeight)
         } catch (e: Throwable) {
             Log.e(TAG, "process error", e)
         } finally {
-            MLog.info(TAG, "end")
             return GifskiJniApi.finish(gifskiNativeObj)
         }
     }
