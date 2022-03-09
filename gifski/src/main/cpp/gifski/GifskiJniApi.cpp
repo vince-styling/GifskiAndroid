@@ -157,7 +157,9 @@ JNI_FUNC(finish)(JNIEnv *env, jclass type, jlong instancePtr) {
 JNIEXPORT void JNICALL
 JNI_FUNC(abort)(JNIEnv *env, jclass type, jint key) {
     logStr(env, "abort: %d", taskKey);
-    taskKey = 0;
+    if (key == taskKey) {
+        taskKey = 0;
+    }
 }
 
 JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved) {
