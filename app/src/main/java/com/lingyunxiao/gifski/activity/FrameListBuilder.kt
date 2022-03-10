@@ -318,10 +318,10 @@ object FrameListBuilder {
         frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000310.png"), 10534788L))
         frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000311.png"), 10567911L))
         frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000312.png"), 10601211L))
-        frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000313.png"), 10601211L))
-        frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000314.png"), 10601211L))
-        frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000315.png"), 10601211L))
-        frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000316.png"), 10601211L))
+        frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000313.png"), 10611211L))
+        frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000314.png"), 10621211L))
+        frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000315.png"), 10631211L))
+        frameList.add(FrameInfo(File("/storage/emulated/0/Android/data/com.lingyx.gifgski/files/4234_png/000316.png"), 10641211L))
         return frameList
     }
 }
