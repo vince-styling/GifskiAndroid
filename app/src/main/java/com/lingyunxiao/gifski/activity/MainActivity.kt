@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         MLog.info(TAG, "start")
         val targetWidth = 675
         val targetHeight = 1200
-        val gifskiNativeObj = GifskiJniApi.gifskiNew(targetWidth, targetHeight, 90, false, true)
+        val gifskiNativeObj = GifskiJniApi.gifskiNew(targetWidth, targetHeight, 90, true, 2)
         MLog.info(TAG, "new instancePtr:$gifskiNativeObj")
         if (gifskiNativeObj == 0L) return -1
         try {

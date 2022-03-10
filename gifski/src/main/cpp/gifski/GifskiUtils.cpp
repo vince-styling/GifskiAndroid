@@ -21,20 +21,6 @@ void *releaseLoggerClass(JNIEnv *env) {
     return nullptr;
 }
 
-void *logStrB(JNIEnv *env, const char *log, bool barg) {
-    jmethodID mLogit = env->GetStaticMethodID(jniApiClass, METHOD_NAME, "(Ljava/lang/String;Z)V");
-    jstring jlog = env->NewStringUTF(log);
-    env->CallStaticVoidMethod(jniApiClass, mLogit, jlog, barg);
-    return nullptr;
-}
-
-void *logStrI(JNIEnv *env, const char *log, int iarg) {
-    jmethodID mLogit = env->GetStaticMethodID(jniApiClass, METHOD_NAME, "(Ljava/lang/String;I)V");
-    jstring jlog = env->NewStringUTF(log);
-    env->CallStaticVoidMethod(jniApiClass, mLogit, jlog, iarg);
-    return nullptr;
-}
-
 void *logStr(JNIEnv *env, const char *format, ...) {
     char buffer[256];
     va_list args;

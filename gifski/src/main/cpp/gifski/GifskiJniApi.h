@@ -15,7 +15,7 @@ extern int taskKey;
 JNIEXPORT long JNICALL
 JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
                     jint width, jint height, jshort quality,
-                    jboolean fast, jboolean repeat);
+                    jboolean fast, jint repeat);
 
 JNIEXPORT int JNICALL
 JNI_FUNC(startProcess)(JNIEnv *env, jclass type,

@@ -81,18 +81,13 @@ int taskKey = 0;
 JNIEXPORT long JNICALL
 JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
                     jint width, jint height, jshort quality,
-                    jboolean fast, jboolean repeat) {
+                    jboolean fast, jint repeat) {
     auto *set = new GifskiSettings();
     set->width = width;
-    logStr(env, "width:%d", set->width);
     set->height = height;
-    logStr(env, "height:%d", set->height);
     set->quality = quality;
-    logStr(env, "quality:%d", set->quality);
     set->fast = fast;
-    logStrB(env, "fast:%s", set->fast);
     set->repeat = repeat;
-    logStrB(env, "repeat:%s", set->repeat);
 
     gifski *instance = gifski_new(env, set);
     if (instance == nullptr) {
@@ -111,7 +106,7 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
     auto *instance = (gifski *) instancePtr;
 
     taskKey = key;
-    logStrI(env, "start process task key:%s", taskKey);
+    logStr(env, "start process task key:%d", taskKey);
     struct ProgressCallback {
         static int onFrameWrited(int user_data, int write_count, int frame_number) {
             auto env = GetJniEnv();

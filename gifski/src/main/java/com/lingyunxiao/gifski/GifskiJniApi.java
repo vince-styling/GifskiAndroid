@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 public class GifskiJniApi {
 
     public static native long gifskiNew(
-            int width, int height, short quality, boolean fast, boolean repeat);
+            int width, int height, short quality, boolean fast, int repeat);
 
     public static native int startProcess(long instancePtr, String filePath, int key);
 

@@ -10,8 +10,6 @@ extern "C" {
 
 void *serveLoggerClass(JNIEnv *env);
 void *releaseLoggerClass(JNIEnv *env);
-void *logStrB(JNIEnv *env, const char *log, bool barg);
-void *logStrI(JNIEnv *env, const char *log, int iarg);
 void *logStr(JNIEnv *env, const char *format, ...);
 
 void *progressCallback(JNIEnv *env, int writeCount, int taskKey);

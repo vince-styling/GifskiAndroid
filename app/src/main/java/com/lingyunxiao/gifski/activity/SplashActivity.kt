@@ -29,6 +29,7 @@ class SplashActivity : AppCompatActivity() {
             btn_opt.setOnClickListener {
                 startActivity(Intent(this, MainActivity::class.java))
             }
+            btn_opt.performClick()
         } else {
             txv_permgrant.text = "需要授予存储权限"
             btn_opt.text = "去授权"
