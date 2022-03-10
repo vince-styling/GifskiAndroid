@@ -115,7 +115,7 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
     struct ProgressCallback {
         static int onFrameWrited(int user_data, int write_count, int frame_number) {
             auto env = GetJniEnv();
-            logStr(env, "frame writed:%d/%d task:%d user:%d", frame_number, write_count, taskKey, user_data);
+            logStr(env, "frame writed index:%d writed_count:%d key:%d vs %d", frame_number, write_count, taskKey, user_data);
             progressCallback(env, write_count, user_data);
             return user_data == taskKey ? 1 : 0;
         }
@@ -150,6 +150,7 @@ JNI_FUNC(finish)(JNIEnv *env, jclass type, jlong instancePtr) {
     logStr(env, "start to finish");
     int result = gifski_finish(env, instance);
     logStr(env, "finish result:%d", result);
+    taskKey = 0;
     return result;
 }
 
