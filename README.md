@@ -29,7 +29,9 @@ cargo build --target aarch64-linux-android --release
 cp target/aarch64-linux-android/release/libgifski.a ~/dev/GifskiAndroid/gifski/src/main/cpp/arm64-v8a/
 
 cargo build --target armv7-linux-androideabi --release
-cp target/armv7-linux-androideabi//release/libgifski.a ~/dev/GifskiAndroid/gifski/src/main/cpp/armeabi-v7a/
+cp target/armv7-linux-androideabi/release/libgifski.a ~/dev/GifskiAndroid/gifski/src/main/cpp/armeabi-v7a/
+
+adb push ~/Desktop/vigif/4234_png /storage/emulated/0/Android/data/com.lingyx.gifgski/files/
 
 gifski v8a so 对比，release 包：
 带 jni + android log 的体积：3.6M，压缩打包到 apk 后：1.4MB

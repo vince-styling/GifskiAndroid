@@ -9,10 +9,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
+import com.lingyunxiao.gifski.FrameListBuilder
 import com.lingyunxiao.gifski.GifskiJniApi
 import com.lingyunxiao.gifski.GifskiUtil.parseGifskiResult
 import com.lingyunxiao.gifski.ILogger
 import com.lingyunxiao.gifski.InstanceKeeper
+import com.lingyunxiao.gifski.MLog
 import com.lingyunxiao.gifski.ProgressCallback
 import com.lingyunxiao.gifski.R
 import kotlinx.android.synthetic.main.activity_main.*

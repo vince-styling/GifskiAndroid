@@ -1,4 +1,4 @@
-package com.lingyunxiao.gifski.activity
+package com.lingyunxiao.gifski
 
 import java.io.File
 

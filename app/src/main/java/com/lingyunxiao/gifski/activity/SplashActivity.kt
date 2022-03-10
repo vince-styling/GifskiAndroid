@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.lingyunxiao.gifski.MLog
 import com.lingyunxiao.gifski.R
 import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.*
