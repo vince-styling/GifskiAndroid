@@ -1,4 +1,4 @@
-package com.lingyunxiao.gifski;
+package com.lingyunxiao.skigifcore;
 
 public class InstanceKeeper {
     public static ILogger logger;

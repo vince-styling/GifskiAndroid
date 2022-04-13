@@ -10,12 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.lingyunxiao.gifski.FrameListBuilder
-import com.lingyunxiao.gifski.GifskiJniApi
-import com.lingyunxiao.gifski.GifskiUtil.parseGifskiResult
-import com.lingyunxiao.gifski.ILogger
-import com.lingyunxiao.gifski.InstanceKeeper
+import com.lingyunxiao.skigifcore.SkigifJniApi
+import com.lingyunxiao.skigifcore.GifskiUtil.parseGifskiResult
+import com.lingyunxiao.skigifcore.ILogger
+import com.lingyunxiao.skigifcore.InstanceKeeper
 import com.lingyunxiao.gifski.MLog
-import com.lingyunxiao.gifski.ProgressCallback
+import com.lingyunxiao.skigifcore.ProgressCallback
 import com.lingyunxiao.gifski.R
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Thread(Runnable {
+        Thread {
             setupGifski()
             val filesDir = getExternalFilesDir(null)!!
             outputFilePath = "$filesDir/4234_png/output.gif"
@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
                         .into(gif_preview)
                 }
             }
-        }).start()
+        }.start()
         btn_abort.setOnClickListener {
-            GifskiJniApi.abort(taskKey)
+            SkigifJniApi.abort(taskKey)
         }
     }
 
@@ -81,17 +81,17 @@ class MainActivity : AppCompatActivity() {
         MLog.info(TAG, "start")
         val targetWidth = 675
         val targetHeight = 1200
-        val gifskiNativeObj = GifskiJniApi.gifskiNew(targetWidth, targetHeight, 90, true, 2)
+        val gifskiNativeObj = SkigifJniApi.skigifNew(targetWidth, targetHeight, 90, true, 2)
         MLog.info(TAG, "new instancePtr:$gifskiNativeObj")
         if (gifskiNativeObj == 0L) return -1
         try {
-            val result = GifskiJniApi.startProcess(gifskiNativeObj, outputFilePath, taskKey)
+            val result = SkigifJniApi.startProcess(gifskiNativeObj, outputFilePath, taskKey)
             MLog.info(TAG, "result means:${parseGifskiResult(result)}")
             if (result == 0) pushFrameList(gifskiNativeObj, targetWidth, targetHeight)
         } catch (e: Throwable) {
             Log.e(TAG, "process error", e)
         } finally {
-            return GifskiJniApi.finish(gifskiNativeObj)
+            return SkigifJniApi.finish(gifskiNativeObj)
         }
     }
 
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             val bitmap = BitmapFactory.decodeFile(frame.file.absolutePath)
             // Presentation timestamp (PTS) is time in seconds, since start of the file, when this frame is to be displayed
             val pts = frame.timestampUs / 1000f / 1000.toDouble()
-            val result = GifskiJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, pts)
+            val result = SkigifJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, pts)
 //            val op = BitmapFactory.Options()
 //            op.inScaled = false
 //            op.inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        GifskiJniApi.abort(taskKey)
+        SkigifJniApi.abort(taskKey)
         isTerminated = true
         truncateGifski()
     }

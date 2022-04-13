@@ -1,10 +1,10 @@
-package com.lingyunxiao.gifski;
+package com.lingyunxiao.skigifcore;
 
 import android.graphics.Bitmap;
 
-public class GifskiJniApi {
+public class SkigifJniApi {
 
-    public static native long gifskiNew(
+    public static native long skigifNew(
             int width, int height, short quality, boolean fast, int repeat);
 
     public static native int startProcess(long instancePtr, String filePath, int key);
@@ -18,7 +18,7 @@ public class GifskiJniApi {
     public static native void abort(int key);
 
     static {
-        System.loadLibrary("gifskiad");
+        System.loadLibrary("skigifcore");
     }
 
     public static void onFrameWrited(int writeCount, int taskKey) {

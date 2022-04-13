@@ -1,7 +1,7 @@
 #include <cstdio>
 #include "GifskiUtils.h"
 
-#define JNI_CLASS "com/lingyunxiao/gifski/GifskiJniApi"
+#define JNI_CLASS "com/lingyunxiao/skigifcore/SkigifJniApi"
 #define METHOD_NAME "logit"
 
 jclass jniApiClass;

@@ -1,4 +1,4 @@
 
--keep class com.lingyunxiao.gifski.GifskiJniApi {
+-keep class com.lingyunxiao.skigifcore.SkigifJniApi {
     public *;
 }

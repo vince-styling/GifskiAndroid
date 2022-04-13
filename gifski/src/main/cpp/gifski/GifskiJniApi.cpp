@@ -79,7 +79,7 @@ JNIEnv *GetJniEnv() {
 int taskKey = 0;
 
 JNIEXPORT long JNICALL
-JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
+JNI_FUNC(skigifNew)(JNIEnv *env, jclass type,
                     jint width, jint height, jshort quality,
                     jboolean fast, jint repeat) {
     auto *set = new GifskiSettings();

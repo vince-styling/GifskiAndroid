@@ -7,7 +7,7 @@ LOCAL_EXPORT_C_INCLUDES := include/
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := gifskiad
+LOCAL_MODULE    := skigifcore
 GIFSKI_SOURCE:= $(wildcard $(LOCAL_PATH)/gifski/*.cpp)
 LOCAL_SRC_FILES += $(GIFSKI_SOURCE)
 

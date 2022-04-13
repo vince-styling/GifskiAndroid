@@ -4,7 +4,7 @@
 #include "GifskiUtils.h"
 #include <android/log.h>
 
-#define JNI_FUNC(x) Java_com_lingyunxiao_gifski_GifskiJniApi_##x
+#define JNI_FUNC(x) Java_com_lingyunxiao_skigifcore_SkigifJniApi_##x
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,7 +13,7 @@ extern "C" {
 extern int taskKey;
 
 JNIEXPORT long JNICALL
-JNI_FUNC(gifskiNew)(JNIEnv *env, jclass type,
+JNI_FUNC(skigifNew)(JNIEnv *env, jclass type,
                     jint width, jint height, jshort quality,
                     jboolean fast, jint repeat);
 
