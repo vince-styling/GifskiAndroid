@@ -54,19 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupGifski() {
-        InstanceKeeper.logger = object : ILogger {
-            override fun logit(msg: String) {
-                MLog.info(TAG, msg)
-            }
-
-            override fun logit(msg: String, arg: Boolean) {
-                MLog.info(TAG, msg, arg)
-            }
-
-            override fun logit(msg: String, arg: Int) {
-                MLog.info(TAG, msg, arg)
-            }
-        }
+        InstanceKeeper.logger = ILogger { msg -> MLog.info(TAG, msg) }
         InstanceKeeper.progressCallback = ProgressCallback { writeCount, taskKey ->
             MLog.info(TAG, "received progress:$writeCount $taskKey")
             if (taskKey == this.taskKey) {

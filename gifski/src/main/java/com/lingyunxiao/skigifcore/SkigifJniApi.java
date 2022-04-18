@@ -30,14 +30,4 @@ public class SkigifJniApi {
         final ILogger logger = InstanceKeeper.logger;
         if (logger != null) logger.logit(msg);
     }
-
-    public static void logit(String msg, boolean arg) {
-        final ILogger logger = InstanceKeeper.logger;
-        if (logger != null) logger.logit(msg, arg);
-    }
-
-    public static void logit(String msg, int arg) {
-        final ILogger logger = InstanceKeeper.logger;
-        if (logger != null) logger.logit(msg, arg);
-    }
 }
