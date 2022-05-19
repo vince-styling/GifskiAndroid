@@ -18,6 +18,7 @@ import com.lingyunxiao.gifski.MLog
 import com.lingyunxiao.skigifcore.ProgressCallback
 import com.lingyunxiao.gifski.R
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private val taskKey = 4234
@@ -31,8 +32,8 @@ class MainActivity : AppCompatActivity() {
 
         Thread {
             setupGifski()
-            val filesDir = getExternalFilesDir(null)!!
-            outputFilePath = "$filesDir/4234_png/output.gif"
+            outputFilePath = FrameListBuilder.buildOutPutLocation()
+            File(outputFilePath).delete()
             val result = process()
             val resultStr = parseGifskiResult(result)
             MLog.info(TAG, "finish result means:$resultStr")
@@ -67,9 +68,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun process(): Int {
         MLog.info(TAG, "start")
-        val targetWidth = 675
-        val targetHeight = 1200
-        val gifskiNativeObj = SkigifJniApi.skigifNew(targetWidth, targetHeight, 90, true, 2)
+        val targetWidth = FrameListBuilder.getTargetWidth()
+        val targetHeight = FrameListBuilder.getTargetHeight()
+//        val (targetWidth, targetHeight) = calculateAdjustSize(
+//            274,
+//            274,
+//            FrameListBuilder.getTargetWidth(),
+//            FrameListBuilder.getTargetHeight()
+//        )
+        val gifskiNativeObj = SkigifJniApi.skigifNew(targetWidth, targetHeight, 100, false, 0)
         MLog.info(TAG, "new instancePtr:$gifskiNativeObj")
         if (gifskiNativeObj == 0L) return -1
         try {
@@ -118,6 +125,20 @@ class MainActivity : AppCompatActivity() {
         InstanceKeeper.logger = null
         InstanceKeeper.progressCallback = null
         MLog.info(TAG, "truncate:${InstanceKeeper.progressCallback}")
+    }
+
+    private fun calculateAdjustSize(maxWidth: Int, maxHeight: Int, frameWidth: Int, frameHeight: Int): Pair<Int, Int> {
+        var adjustWidth = Math.min(frameWidth, maxWidth)
+        var adjustHeight = Math.min(frameHeight, maxHeight)
+        MLog.info("VideoInfo", "max:${maxWidth}x$maxHeight frame:${frameWidth}x$frameHeight")
+        val ratio = frameHeight.toFloat() / frameWidth
+        if (frameHeight > frameWidth) {
+            adjustWidth = (adjustHeight / ratio).toInt()
+        } else {
+            adjustHeight = (ratio * adjustWidth).toInt()
+        }
+        MLog.info("VideoInfo", "adjusted:${adjustWidth}x$adjustHeight")
+        return Pair(adjustWidth, adjustHeight)
     }
 
     companion object {
