@@ -140,17 +140,6 @@ JNI_FUNC(addFrameRgba)(JNIEnv *env, jclass type,
 }
 
 JNIEXPORT int JNICALL
-JNI_FUNC(addFrameFile)(JNIEnv *env, jclass type,
-                        jlong instancePtr, jstring framePath,
-                        jint index, jdouble pts) {
-    auto *instance = (gifski *) instancePtr;
-    const char *ntvFramePath = env->GetStringUTFChars(framePath, nullptr);
-    GifskiError result = gifski_add_frame_png_file(env, instance, index, ntvFramePath, pts);
-    env->ReleaseStringUTFChars(framePath, ntvFramePath);
-    return result;
-}
-
-JNIEXPORT int JNICALL
 JNI_FUNC(finish)(JNIEnv *env, jclass type, jlong instancePtr) {
     auto *instance = (gifski *) instancePtr;
     logStr(env, "start to finish");

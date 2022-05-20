@@ -1,5 +1,6 @@
 package com.lingyunxiao.gifski.activity
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -67,14 +68,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun process(): Int {
         MLog.info(TAG, "start")
-//        val targetWidth = FrameListBuilder.getTargetWidth()
-//        val targetHeight = FrameListBuilder.getTargetHeight()
-        val (targetWidth, targetHeight) = calculateAdjustSize(
-            274,
-            274,
-            FrameListBuilder.getTargetWidth(),
-            FrameListBuilder.getTargetHeight()
-        )
+        val targetWidth = FrameListBuilder.getTargetWidth()
+        val targetHeight = FrameListBuilder.getTargetHeight()
+//        val (targetWidth, targetHeight) = calculateAdjustSize(
+//            274,
+//            274,
+//            FrameListBuilder.getTargetWidth(),
+//            FrameListBuilder.getTargetHeight()
+//        )
         val gifskiNativeObj = SkigifJniApi.skigifNew(targetWidth, targetHeight, 100, false, 0)
         MLog.info(TAG, "new instancePtr:$gifskiNativeObj")
         if (gifskiNativeObj == 0L) return -1
@@ -93,11 +94,10 @@ class MainActivity : AppCompatActivity() {
         val frameList = FrameListBuilder.build()
         MLog.info(TAG, "frame size:${frameList.size}")
         for ((index, frame) in frameList.withIndex()) {
+            val bitmap = BitmapFactory.decodeFile(frame.file.absolutePath)
             // Presentation timestamp (PTS) is time in seconds, since start of the file, when this frame is to be displayed
             val pts = frame.timestampUs / 1000f / 1000.toDouble()
-//            val bitmap = BitmapFactory.decodeFile(frame.file.absolutePath)
-//            val result = SkigifJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, pts)
-            val result = SkigifJniApi.addFrameFile(gifskiNativeObj, frame.file.absolutePath, index, pts)
+            val result = SkigifJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, pts)
 //            val op = BitmapFactory.Options()
 //            op.inScaled = false
 //            op.inPreferredConfig = Bitmap.Config.ARGB_8888
