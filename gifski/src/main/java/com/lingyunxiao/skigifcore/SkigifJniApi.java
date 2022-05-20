@@ -13,6 +13,8 @@ public class SkigifJniApi {
             long instancePtr, Bitmap bitmap,
             int index, int width, int height, double pts);
 
+    public static native int addFrameFile(long instancePtr, String framePath, int index, double pts);
+
     public static native int finish(long instancePtr);
 
     public static native void abort(int key);

@@ -26,6 +26,11 @@ JNI_FUNC(addFrameRgba)(JNIEnv *env, jclass type,
                        jlong instancePtr, jobject bitmap,
                        jint index, jint width, jint height, jdouble pts);
 
+JNIEXPORT int JNICALL
+JNI_FUNC(addFrameFile)(JNIEnv *env, jclass type,
+                       jlong instancePtr, jstring framePath,
+                       jint index, jdouble pts);
+
 JNIEXPORT void JNICALL
 JNI_FUNC(abort)(JNIEnv *env, jclass type, jint key);
 
