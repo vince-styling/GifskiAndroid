@@ -10,8 +10,14 @@ public class SkigifJniApi {
     public static native int startProcess(long instancePtr, String filePath, int key);
 
     public static native int addFrameRgba(
-            long instancePtr, Bitmap bitmap,
+            long instancePtr, byte[] pixels,
             int index, int width, int height, double pts);
+
+    public static native int addFrameArgb(
+            long instancePtr, Bitmap bitmap,
+            int index, int width, int height, int rowBytes, double pts);
+
+    public static native int addFrameFile(long instancePtr, String framePath, int index, double pts);
 
     public static native int finish(long instancePtr);
 

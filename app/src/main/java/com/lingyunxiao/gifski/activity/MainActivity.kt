@@ -97,14 +97,18 @@ class MainActivity : AppCompatActivity() {
             val bitmap = BitmapFactory.decodeFile(frame.file.absolutePath)
             // Presentation timestamp (PTS) is time in seconds, since start of the file, when this frame is to be displayed
             val pts = frame.timestampUs / 1000f / 1000.toDouble()
-            val result = SkigifJniApi.addFrameRgba(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, pts)
+            val config = bitmap.config
+            println(config)
+//            val bytes = BitmapUtils.bitmapToRgba(bitmap)
+//            val result = SkigifJniApi.addFrameRgba(gifskiNativeObj, bytes, index, targetWidth, targetHeight, pts)
 //            val op = BitmapFactory.Options()
 //            op.inScaled = false
 //            op.inPreferredConfig = Bitmap.Config.ARGB_8888
 //            val bitmap = BitmapFactory.decodeFile(frame, op)
 //            MLog.info(TAG, "rowBytes:${bitmap.rowBytes}")
-//            val result = GifskiJniApi.addFrameRgb(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, bitmap.rowBytes, 5)
-//            val result = GifskiJniApi.addFrameARgb(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, bitmap.rowBytes, 5)
+//            val result = SkigifJniApi.addFrameRgb(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, bitmap.rowBytes, pts)
+//            val result = SkigifJniApi.addFrameArgb(gifskiNativeObj, bitmap, index, targetWidth, targetHeight, bitmap.rowBytes, pts)
+            val result = SkigifJniApi.addFrameFile(gifskiNativeObj, frame.file.absolutePath, index, pts)
             if (isTerminated) return
             if (result != 0) {
                 MLog.info(TAG, "push frame result means:${parseGifskiResult(result)}")

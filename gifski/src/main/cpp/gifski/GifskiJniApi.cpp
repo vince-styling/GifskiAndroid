@@ -126,17 +126,44 @@ JNI_FUNC(startProcess)(JNIEnv *env, jclass type,
 
 JNIEXPORT int JNICALL
 JNI_FUNC(addFrameRgba)(JNIEnv *env, jclass type,
-                        jlong instancePtr, jobject bitmap,
+                        jlong instancePtr, jbyteArray pixels,
                         jint index, jint width, jint height, jdouble pts) {
+    auto *instance = (gifski *) instancePtr;
+    jbyte *bBuffer = env->GetByteArrayElements(pixels, 0);
+    auto *data = (unsigned char *) bBuffer;
+    if (data != nullptr) {
+        GifskiError result = gifski_add_frame_rgba(env, instance, index, width, height, data, pts);
+        env->ReleaseByteArrayElements(pixels, bBuffer, 0);
+        return result;
+    }
+    // 扩展自 GifskiError 的错误索引
+    return 16;
+}
+
+JNIEXPORT int JNICALL
+JNI_FUNC(addFrameArgb)(JNIEnv *env, jclass type,
+                       jlong instancePtr, jobject bitmap,
+                       jint index, jint width, jint height, jint rowBytes, jdouble pts) {
     auto *instance = (gifski *) instancePtr;
     auto *data = static_cast<unsigned char *>(lockBitmapPixels(env, bitmap));
     if (data != nullptr) {
-        GifskiError result = gifski_add_frame_rgba(env, instance, index, width, height, data, pts);
+        GifskiError result = gifski_add_frame_argb(env, instance, index, width, rowBytes, height, data, pts);
         AndroidBitmap_unlockPixels(env, bitmap);
         return result;
     }
     // 扩展自 GifskiError 的错误索引
     return 16;
+}
+
+JNIEXPORT int JNICALL
+JNI_FUNC(addFrameFile)(JNIEnv *env, jclass type,
+                        jlong instancePtr, jstring framePath,
+                        jint index, jdouble pts) {
+    auto *instance = (gifski *) instancePtr;
+    const char *ntvFramePath = env->GetStringUTFChars(framePath, nullptr);
+    GifskiError result = gifski_add_frame_png_file(env, instance, index, ntvFramePath, pts);
+    env->ReleaseStringUTFChars(framePath, ntvFramePath);
+    return result;
 }
 
 JNIEXPORT int JNICALL
