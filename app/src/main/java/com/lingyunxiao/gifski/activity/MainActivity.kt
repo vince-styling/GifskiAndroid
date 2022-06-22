@@ -32,13 +32,14 @@ class MainActivity : AppCompatActivity() {
 
         Thread {
             setupGifski()
-            outputFilePath = FrameListBuilder.buildOutPutLocation()
+            outputFilePath = FrameListBuilder.buildOutPutLocation(this)
             File(outputFilePath).delete()
             val result = process()
             val resultStr = parseGifskiResult(result)
             MLog.info(TAG, "finish result means:$resultStr")
             Handler(Looper.getMainLooper()).post {
                 txv_result.text = "已结束：$resultStr"
+                txv_progress.visibility = View.GONE
                 btn_abort.visibility = View.GONE
                 if (result == 0) {
                     gif_preview.visibility = View.VISIBLE
